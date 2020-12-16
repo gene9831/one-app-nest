@@ -1,0 +1,146 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BaseMovie {
+  id: Int!
+  adult: Boolean!
+  backdrop_path: String
+  genre_ids: [Int!]
+  original_language: String!
+  original_title: String!
+  overview: String
+  poster_path: String
+  release_date: String
+  title: String!
+  hasVideo: Boolean
+}
+
+type Collection {
+  id: Int!
+  backdrop_path: String
+  name: String!
+  overview: String
+  parts: [BaseMovie!]
+  poster_path: String
+}
+
+type Identity {
+  displayName: String
+  id: String
+}
+
+type IdentitySet {
+  application: Identity
+  device: Identity
+  user: Identity
+}
+
+type Quota {
+  total: Int!
+  used: Int!
+  remaining: Int!
+  deleted: Int!
+  state: String!
+}
+
+type Drive {
+  id: String!
+  createdDateTime: String!
+  description: String!
+  driveType: String!
+  lastModifiedDateTime: String!
+  name: String!
+  owner: IdentitySet
+  quota: Quota
+}
+
+type Genre {
+  id: Int!
+  name: String!
+}
+
+type Image {
+  aspect_ratio: Float!
+  file_path: String!
+  height: Int!
+  iso_639_1: String
+  width: Int!
+}
+
+type Images {
+  id: Int!
+  backdrops(size: Int = 3): [Image!]!
+  posters(size: Int = 1): [Image!]!
+}
+
+type Company {
+  id: Int!
+  logo_path: String
+  name: String!
+  origin_country: String!
+}
+
+type Country {
+  iso_3166_1: String!
+  name: String!
+}
+
+type Movie {
+  id: Int!
+  adult: Boolean!
+  backdrop_path: String
+  genre_ids: [Int!]
+  original_language: String!
+  original_title: String!
+  overview: String
+  poster_path: String
+  release_date: String
+  title: String!
+  hasVideo: Boolean
+  belongs_to_collection: Collection
+  directors: [Person!]
+  genres: [Genre!]!
+  homepage: String
+  images: Images
+  imdb_id: String
+  production_companies: [Company!]
+  production_countries: [Country!]
+  runtime: Int
+  status: String
+}
+
+type Person {
+  id: Int!
+  also_known_as: [String!]
+  birthday: String
+  deathday: String
+  imdb_id: String
+  known_for_department: String
+  name: String!
+  place_of_birth: String
+  profile_path: String
+}
+
+type Query {
+  drives: [Drive!]!
+  collection(id: Int!): Collection!
+  genres: [Genre!]!
+  movie(id: Int!): Movie!
+  movies(skip: Int = 0, limit: Int = 20, search: String, genreIds: [Int!], genreFilterType: GenreFilterType = AND, order: Order = DESC, orderBy: OrderBy = RELEASE_DATE): [Movie!]!
+  person(id: Int!): Person!
+}
+
+enum GenreFilterType {
+  OR
+  AND
+}
+
+enum Order {
+  DESC
+  ASC
+}
+
+enum OrderBy {
+  RELEASE_DATE
+}
