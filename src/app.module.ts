@@ -4,6 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLError } from 'graphql';
 import { OnedriveModule } from './onedrive';
 import { TmdbMoviesModule } from './tmdb-movies';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { TmdbMoviesModule } from './tmdb-movies';
     }),
     OnedriveModule,
     TmdbMoviesModule,
+    AuthModule,
+    UsersModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
