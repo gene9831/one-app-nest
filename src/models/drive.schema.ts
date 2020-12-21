@@ -25,34 +25,42 @@ class IdentitySet {
 
 @ObjectType()
 class Quota {
-  @Prop(Number)
   @Field(() => Int)
   total: number;
 
-  @Prop(Number)
   @Field(() => Int)
   used: number;
 
-  @Prop(Number)
   @Field(() => Int)
   remaining: number;
 
-  @Prop(Number)
   @Field(() => Int)
   deleted: number;
 
-  @Prop()
   @Field()
   state: string;
 }
 
+@ObjectType()
+export class Settings {
+  @Field({ nullable: true })
+  root_path?: string;
+
+  @Field({ nullable: true })
+  movies_path?: string;
+}
+
 @Schema()
 @ObjectType()
-export class Drive {
+export class SimpleDrive {
   @Prop()
   @Field()
   id: string;
+}
 
+@Schema()
+@ObjectType()
+export class Drive extends SimpleDrive {
   @Prop()
   @Field()
   createdDateTime: string;
@@ -88,8 +96,9 @@ export class Drive {
   @Prop()
   delta_link?: string;
 
-  @Prop({ type: MongooseSchema.Types.Map })
-  settings?: any;
+  @Prop(Settings)
+  @Field(() => Settings, { nullable: true })
+  settings?: Settings;
 
   @Prop({ type: MongooseSchema.Types.Map })
   token?: any;
@@ -97,3 +106,6 @@ export class Drive {
 
 export type DriveDocument = Drive & Document;
 export const DriveSchema = SchemaFactory.createForClass(Drive);
+
+export type SimpleDriveDocument = SimpleDrive & Document;
+export const SimpleScheme = SchemaFactory.createForClass(SimpleDrive);

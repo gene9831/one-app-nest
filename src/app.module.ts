@@ -5,13 +5,13 @@ import { GraphQLError } from 'graphql';
 import { OnedriveModule } from './onedrive';
 import { TmdbMoviesModule } from './tmdb-movies';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { AppController } from './app.controller';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URL),
     GraphQLModule.forRoot({
+      playground: process.env.GQL_PLAYGROUD === `${true}`,
       autoSchemaFile: 'schema.gql',
       debug: process.env.DEBUG === `${true}`,
       formatError: (err: GraphQLError) => {
@@ -36,8 +36,7 @@ import { AppController } from './app.controller';
     OnedriveModule,
     TmdbMoviesModule,
     AuthModule,
-    UsersModule,
+    AdminModule,
   ],
-  controllers: [AppController],
 })
 export class AppModule {}

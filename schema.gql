@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResult {
+  access_token: String!
+  expires_at: Int!
+}
+
 type BaseMovie {
   id: Int!
   adult: Boolean!
@@ -44,6 +49,15 @@ type Quota {
   state: String!
 }
 
+type Settings {
+  root_path: String
+  movies_path: String
+}
+
+type SimpleDrive {
+  id: String!
+}
+
 type Drive {
   id: String!
   createdDateTime: String!
@@ -53,6 +67,7 @@ type Drive {
   name: String!
   owner: IdentitySet
   quota: Quota
+  settings: Settings
 }
 
 type Genre {
@@ -124,6 +139,7 @@ type Person {
 
 type Query {
   drives: [Drive!]!
+  drivesInfo: [SimpleDrive!]!
   collection(id: Int!): Collection!
   genres: [Genre!]!
   movie(id: Int!): Movie!
@@ -143,4 +159,8 @@ enum Order {
 
 enum OrderBy {
   RELEASE_DATE
+}
+
+type Mutation {
+  authAdmin(password: String!, username: String!): AuthResult!
 }

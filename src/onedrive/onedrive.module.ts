@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AdminModule } from 'src/admin/admin.module';
 import { Drive, DriveSchema } from 'src/models';
+import { DrivesInfoResolver } from './drives-info.resolver';
 import { DrivesResolver } from './drives.resolver';
 
 @Module({
@@ -12,7 +14,8 @@ import { DrivesResolver } from './drives.resolver';
         collection: 'onedrive.drives',
       },
     ]),
+    AdminModule,
   ],
-  providers: [DrivesResolver],
+  providers: [DrivesResolver, DrivesInfoResolver],
 })
 export class OnedriveModule {}
