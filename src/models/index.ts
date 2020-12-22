@@ -7,6 +7,7 @@ export * from './drive.schema';
 export * from './genre.schema';
 export * from './images.schema';
 export * from './item.schema';
+export * from './mds.schema';
 export * from './movie.schema';
 export * from './person.schema';
 export * from './user.schema';

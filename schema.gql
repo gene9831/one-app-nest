@@ -109,6 +109,11 @@ type Item {
   movie_id: Int
 }
 
+type MDs {
+  head: String!
+  readme: String!
+}
+
 type Company {
   id: Int!
   logo_path: String
@@ -161,6 +166,7 @@ type Query {
   drivesPublic: [SimpleDrive!]!
   drives: [Drive!]!
   itemsPublic(skip: Int = 0, limit: Int = 20, driveId: String!, folderPath: String = "", search: String, order: Order = ASC, orderBy: ItemsOrderBy = NAME): [Item!]!
+  mdsPublic(folderPath: String = "", driveId: String!): MDs!
   collection(id: Int!): Collection!
   genres: [Genre!]!
   movie(id: Int!): Movie!

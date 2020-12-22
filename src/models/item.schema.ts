@@ -65,6 +65,9 @@ export class Item {
   @Field(() => Float)
   size: number;
 
+  @Prop()
+  content?: string;
+
   @Prop(Number)
   @Field(() => Int, { nullable: true })
   movie_id?: number;

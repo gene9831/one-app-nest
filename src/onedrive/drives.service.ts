@@ -3,7 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { GetItemsArgs } from 'src/dto/get-items.args';
-import { Drive, DriveDocument, Item, ItemDocument, Settings } from 'src/models';
+import {
+  Drive,
+  DriveDocument,
+  Item,
+  ItemDocument,
+  MDs,
+  Settings,
+} from 'src/models';
 
 @Injectable()
 export class DrivesService {
@@ -36,6 +43,7 @@ export class DrivesService {
     const result = await this.itemModel.aggregate([
       {
         $match: {
+          'parentReference.driveId': args.driveId,
           'parentReference.path': parentPath,
           ...(args.search
             ? { name: { $regex: args.search, $options: 'i' } }
@@ -64,6 +72,39 @@ export class DrivesService {
         throw new NotFoundException('Invalid folder path');
       }
     }
+    return result;
+  }
+
+  async findMDsPublic(driveId: string, folderPath: string): Promise<MDs> {
+    const drive = await this.findDrive(driveId, {
+      'settings.public': true,
+    });
+
+    const parentPath = path
+      .join('/drive/root:', drive.settings.root_path, folderPath)
+      .replace(/\/$/, '');
+
+    const result = new MDs();
+
+    (
+      await this.itemModel
+        .find(
+          {
+            'parentReference.driveId': driveId,
+            'parentReference.path': parentPath,
+            name: { $in: ['README.md', 'HEAD.md'] },
+          },
+          { _id: 0, name: 1, content: 1 },
+        )
+        .exec()
+    ).forEach((item) => {
+      if (item.name === 'README.md') {
+        result.readme = item.content;
+      } else if (item.name === 'HEAD.me') {
+        result.head = item.content;
+      }
+    });
+
     return result;
   }
 
