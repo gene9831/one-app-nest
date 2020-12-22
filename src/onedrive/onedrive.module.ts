@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AdminModule } from 'src/admin/admin.module';
-import { Drive, DriveSchema } from 'src/models';
-import { DrivesInfoResolver } from './drives-info.resolver';
-import { DrivesResolver } from './drives.resolver';
+import { Drive, DriveSchema, Item, ItemSchema } from 'src/models';
+import { DrivesPublicResolver, DrivesResolver, ItemsResolver } from '.';
 
 @Module({
   imports: [
@@ -13,9 +12,14 @@ import { DrivesResolver } from './drives.resolver';
         schema: DriveSchema,
         collection: 'onedrive.drives',
       },
+      {
+        name: Item.name,
+        schema: ItemSchema,
+        collection: 'onedrive.items',
+      },
     ]),
     AdminModule,
   ],
-  providers: [DrivesResolver, DrivesInfoResolver],
+  providers: [DrivesResolver, DrivesPublicResolver, ItemsResolver],
 })
 export class OnedriveModule {}

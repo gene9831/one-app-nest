@@ -9,7 +9,7 @@ import {
 } from 'src/models';
 
 @Resolver(() => SimpleDrive)
-export class DrivesInfoResolver {
+export class DrivesPublicResolver {
   constructor(
     // 这里model直接用Drive Model，同一个数据库
     @InjectModel(Drive.name)
@@ -17,7 +17,7 @@ export class DrivesInfoResolver {
   ) {}
 
   @Query(() => [SimpleDrive])
-  async drivesInfo(): Promise<SimpleDriveDocument[]> {
-    return this.driveModel.find().exec();
+  async drivesPublic(): Promise<SimpleDriveDocument[]> {
+    return this.driveModel.find({ 'settings.public': true }).exec();
   }
 }

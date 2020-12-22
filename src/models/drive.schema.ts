@@ -48,6 +48,9 @@ export class Settings {
 
   @Field({ nullable: true })
   movies_path?: string;
+
+  @Field(() => Boolean, { nullable: true })
+  public?: boolean;
 }
 
 @Schema()

@@ -52,6 +52,7 @@ type Quota {
 type Settings {
   root_path: String
   movies_path: String
+  public: Boolean
 }
 
 type SimpleDrive {
@@ -87,6 +88,25 @@ type Images {
   id: Int!
   backdrops(size: Int = 3): [Image!]!
   posters(size: Int = 1): [Image!]!
+}
+
+type File {
+  mimeType: String!
+}
+
+type Folder {
+  childCount: Int!
+}
+
+type Item {
+  id: String!
+  createdDateTime: String!
+  file: File
+  folder: Folder
+  lastModifiedDateTime: String!
+  name: String!
+  size: Float!
+  movie_id: Int
 }
 
 type Company {
@@ -138,18 +158,14 @@ type Person {
 }
 
 type Query {
+  drivesPublic: [SimpleDrive!]!
   drives: [Drive!]!
-  drivesInfo: [SimpleDrive!]!
+  items(skip: Int = 0, limit: Int = 20, driveId: String!, folderPath: String = "", search: String, order: Order = ASC, orderBy: ItemsOrderBy = NAME): [Item!]!
   collection(id: Int!): Collection!
   genres: [Genre!]!
   movie(id: Int!): Movie!
-  movies(skip: Int = 0, limit: Int = 20, search: String, genreIds: [Int!], genreFilterType: GenreFilterType = AND, order: Order = DESC, orderBy: OrderBy = RELEASE_DATE): [Movie!]!
+  movies(skip: Int = 0, limit: Int = 20, search: String, genreIds: [Int!], genreFilterType: GenreFilterType = AND, order: Order = DESC, orderBy: MoviesOrderBy = RELEASE_DATE): [Movie!]!
   person(id: Int!): Person!
-}
-
-enum GenreFilterType {
-  OR
-  AND
 }
 
 enum Order {
@@ -157,7 +173,17 @@ enum Order {
   ASC
 }
 
-enum OrderBy {
+enum ItemsOrderBy {
+  NAME
+  LAST_MODIFIED_DATETIME
+}
+
+enum GenreFilterType {
+  OR
+  AND
+}
+
+enum MoviesOrderBy {
   RELEASE_DATE
 }
 
