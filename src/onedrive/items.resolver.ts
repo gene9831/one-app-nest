@@ -8,7 +8,7 @@ export class ItemsResolver {
   constructor(private readonly drivesService: DrivesService) {}
 
   @Query(() => [Item])
-  async items(@Args() args: GetItemsArgs): Promise<ItemDocument[]> {
+  async itemsPublic(@Args() args: GetItemsArgs): Promise<ItemDocument[]> {
     return this.drivesService.findItemsPublic(args);
   }
 }

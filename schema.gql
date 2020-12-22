@@ -160,7 +160,7 @@ type Person {
 type Query {
   drivesPublic: [SimpleDrive!]!
   drives: [Drive!]!
-  items(skip: Int = 0, limit: Int = 20, driveId: String!, folderPath: String = "", search: String, order: Order = ASC, orderBy: ItemsOrderBy = NAME): [Item!]!
+  itemsPublic(skip: Int = 0, limit: Int = 20, driveId: String!, folderPath: String = "", search: String, order: Order = ASC, orderBy: ItemsOrderBy = NAME): [Item!]!
   collection(id: Int!): Collection!
   genres: [Genre!]!
   movie(id: Int!): Movie!
