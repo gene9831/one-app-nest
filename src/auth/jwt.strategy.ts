@@ -1,11 +1,10 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AdminService } from 'src/admin/admin.service';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly adminService: AdminService) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,10 +14,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // passport-jwt会自动验证headers里面的Authorization字段, 验证成功后会解密成payload对象
-    if (!this.adminService.findOne(payload.username)) {
-      throw new UnauthorizedException();
-    }
     // 返回值会赋值给req.user，使用@CurrentUser装饰器获取req.user
-    return payload;
+    const { iat, exp, sub, ...others } = payload;
+    return { _id: payload.sub, ...others };
   }
 }
