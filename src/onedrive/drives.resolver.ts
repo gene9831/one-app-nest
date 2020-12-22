@@ -1,17 +1,16 @@
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminService } from 'src/admin/admin.service';
 import { GqlJwtAuthGuard } from 'src/auth/gql-jwt-auth.guard';
 import { CurrentUser } from 'src/decorators/gql-user.decorator';
+import { SettingsArgs } from 'src/dto/update-settings.args';
 import { Drive, DriveDocument } from 'src/models';
+import { DrivesService } from './drives.service';
 
 @Resolver(() => Drive)
 export class DrivesResolver {
   constructor(
-    @InjectModel(Drive.name)
-    private readonly driveModel: Model<DriveDocument>,
+    private readonly drivesService: DrivesService,
     private readonly adminService: AdminService,
   ) {}
 
@@ -21,6 +20,13 @@ export class DrivesResolver {
     if (!(await this.adminService.findOne(user.username))) {
       throw new UnauthorizedException();
     }
-    return this.driveModel.find().exec();
+    return this.drivesService.findDrives();
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GqlJwtAuthGuard)
+  async driveSettings(@Args() args: SettingsArgs) {
+    const { driveId, ...others } = args;
+    return this.drivesService.settingsUpdate(driveId, others);
   }
 }

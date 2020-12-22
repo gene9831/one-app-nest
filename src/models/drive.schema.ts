@@ -41,14 +41,18 @@ class Quota {
   state: string;
 }
 
+@Schema()
 @ObjectType()
 export class Settings {
+  @Prop({ default: '/' })
   @Field({ nullable: true })
   root_path?: string;
 
+  @Prop({ default: '/Movies' })
   @Field({ nullable: true })
   movies_path?: string;
 
+  @Prop({ default: false })
   @Field(() => Boolean, { nullable: true })
   public?: boolean;
 }

@@ -188,5 +188,6 @@ enum MoviesOrderBy {
 }
 
 type Mutation {
+  driveSettings(driveId: String!, root_path: String, movies_path: String, public: Boolean): Boolean!
   authAdmin(password: String!, username: String!): AuthResult!
 }
