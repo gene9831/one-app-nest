@@ -6,14 +6,20 @@ import { JwtModule } from '@nestjs/jwt';
 import { LocalAdminStrategy } from './local-admin.strategy';
 import { AdminModule } from 'src/admin/admin.module';
 import { AuthResolver } from './auth.resolver';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AdminModule,
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '3600s' },
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => {
+        return {
+          secret: configService.get('jwtSecret'),
+          signOptions: { expiresIn: '3600s' },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   providers: [AuthService, AuthResolver, LocalAdminStrategy, JwtStrategy],
